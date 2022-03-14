@@ -19,32 +19,29 @@ public class DataGraph : MonoBehaviour
         _lineRenderer = gameObject.GetComponent<LineRenderer>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void SetPoints(float[] points)
     {
-        RandomPoints();
-        GenerateGraph();
+        _points = points;
     }
 
-    /// <summary>
-    /// Creates x random points to simulate a graph
-    /// </summary>
-    private void RandomPoints()
+    public void SetLineColor(Color color)
     {
-        int amount = 50;
-        _points = new float[amount];
-        for (int i = 0; i < amount; i++)
-        {
-            _points[i] = Random.Range(-500f, 500f);
-        }
+        _lineRenderer.startColor = _lineRenderer.endColor = color;
     }
 
-    private void GenerateGraph()
+    public float GetMaxNumber()
+    {
+        return _points.Max();
+    }
+    
+    public float GetMinNumber()
+    {
+        return _points.Min();
+    }
+
+    public void GenerateGraph(int range)
     {
         int amount = _points.Length;
-        float maxValue = _points.Max();
-        float minValue = _points.Min();
-        float range = Mathf.Max(Mathf.Abs(maxValue), Mathf.Abs(minValue)) * 2;
         Vector3[] points = new Vector3[amount];
 
         for (int i = 0; i < amount; i++)
