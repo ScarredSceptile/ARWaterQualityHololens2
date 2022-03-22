@@ -37,7 +37,6 @@ public class DetectWater : MonoBehaviour
         Cv2.FindContours(canny_output, out contours, out hierarchy, RetrievalModes.Tree, ContourApproximationModes.ApproxSimple);
 
         Mat drawing = Mat.Zeros(canny_output.Size(), MatType.CV_8UC1);
-        Debug.Log(contours.Length);
         for (int i = 0; i < contours.Length; i++)
         {
             Cv2.DrawContours(drawing, contours, i, Scalar.Aquamarine, 1, LineTypes.Link8, hierarchy, 0);

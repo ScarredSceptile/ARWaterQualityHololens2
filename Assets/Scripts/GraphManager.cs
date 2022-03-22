@@ -43,6 +43,7 @@ public class GraphManager : MonoBehaviour
             var name = RandomString();
             indicator.graph = graph;
             indicator.SetName(name);
+            indicator.SetManager(this);
             _dataIndicators.Add(indicator);
         }
 
@@ -97,5 +98,15 @@ public class GraphManager : MonoBehaviour
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         return new string(Enumerable.Repeat(chars, 8)
             .Select(s => s[Random.Range(0,s.Length)]).ToArray());
+    }
+
+    public void HideOtherLines(DataIndicator origin)
+    {
+        _dataIndicators.Where(d => d != origin).ToList().ForEach(d => d.HideLine());
+    }
+
+    public void ShowLines()
+    {
+        _dataIndicators.ForEach(d => d.ShowLine());
     }
 }
