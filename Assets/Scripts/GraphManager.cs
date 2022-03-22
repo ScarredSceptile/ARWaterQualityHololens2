@@ -7,9 +7,11 @@ using UnityEngine;
 public class GraphManager : MonoBehaviour
 {
     [SerializeField]
-    private List<DataGraph> _dataGraphs;
+    private List<DataIndicator> _dataIndicators;
     [SerializeField]
     private GameObject _lineObject;
+    [SerializeField]
+    private GameObject _indicatorObject;
     [SerializeField]
     private TextMeshPro _maxText;
     [SerializeField]
@@ -20,21 +22,28 @@ public class GraphManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _dataGraphs = new List<DataGraph>();
+        _dataIndicators = new List<DataIndicator>();
         int range = 100;
 
         for (int i = 0; i < colors.Length; i++)
         {
             var obj = Instantiate(_lineObject, transform);
+            var ind = Instantiate(_indicatorObject, transform);
+            ind.transform.localPosition = new Vector3(0.645f, 0.464f - i * 0.3f, 0f);
             var graph = obj.GetComponent<DataGraph>();
+            var indicator = ind.GetComponent<DataIndicator>();
             graph.SetLineColor(colors[i]);
+            indicator.SetColor(colors[i]);
             var points = RandomPoints(30, -range * (i + 1), range * (i + 1));
             graph.SetPoints(points);
-            _dataGraphs.Add(graph);
+            var name = RandomString();
+            indicator.graph = graph;
+            indicator.SetName(name);
+            _dataIndicators.Add(indicator);
         }
 
-        var minValue = _dataGraphs.Min(n => n.GetMinNumber());
-        var maxValue = _dataGraphs.Max(n => n.GetMaxNumber());
+        var minValue = _dataIndicators.Min(n => n.graph.GetMinNumber());
+        var maxValue = _dataIndicators.Max(n => n.graph.GetMaxNumber());
 
         var max = RoundNumber(maxValue);
         var min = RoundNumber(minValue);
@@ -42,7 +51,7 @@ public class GraphManager : MonoBehaviour
         int graphRange = Mathf.Max(Mathf.Abs(max), Mathf.Abs(min)) * 2;
         _maxText.text = (graphRange / 2).ToString();
         _minText.text = (-graphRange / 2).ToString();
-        _dataGraphs.ForEach(n => n.GenerateGraph(graphRange));
+        _dataIndicators.ForEach(n => n.graph.GenerateGraph(graphRange));
     }
 
     /// <summary>
@@ -64,5 +73,13 @@ public class GraphManager : MonoBehaviour
         var posNum = (int)Mathf.Abs(number);
         var scale = (int)Mathf.Pow(10, Mathf.Floor(Mathf.Log10(posNum)));
         return negativ * scale * (int)Mathf.Round(posNum / scale + 1);
+    }
+
+
+    private static string RandomString()
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        return new string(Enumerable.Repeat(chars, 8)
+            .Select(s => s[Random.Range(0,s.Length)]).ToArray());
     }
 }
