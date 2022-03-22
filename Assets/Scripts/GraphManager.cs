@@ -17,6 +17,9 @@ public class GraphManager : MonoBehaviour
     [SerializeField]
     private TextMeshPro _minText;
 
+    public float PositionDistance;
+    private float _positionDistance;
+
     private Color[] colors = { Color.green, Color.red, Color.magenta, Color.white, Color.black, Color.cyan };
 
     // Start is called before the first frame update
@@ -24,12 +27,13 @@ public class GraphManager : MonoBehaviour
     {
         _dataIndicators = new List<DataIndicator>();
         int range = 100;
+        _positionDistance = PositionDistance;
 
         for (int i = 0; i < colors.Length; i++)
         {
             var obj = Instantiate(_lineObject, transform);
             var ind = Instantiate(_indicatorObject, transform);
-            ind.transform.localPosition = new Vector3(0.645f, 0.464f - i * 0.3f, 0f);
+            ind.transform.localPosition = new Vector3(0.645f, 0.464f - i * _positionDistance, 0f);
             var graph = obj.GetComponent<DataGraph>();
             var indicator = ind.GetComponent<DataIndicator>();
             graph.SetLineColor(colors[i]);
@@ -52,6 +56,18 @@ public class GraphManager : MonoBehaviour
         _maxText.text = (graphRange / 2).ToString();
         _minText.text = (-graphRange / 2).ToString();
         _dataIndicators.ForEach(n => n.graph.GenerateGraph(graphRange));
+    }
+
+    private void Update()
+    {
+        if (_positionDistance != PositionDistance)
+        {
+            _positionDistance = PositionDistance;
+            for (int i = 0; i < _dataIndicators.Count; i++)
+            {
+                _dataIndicators[i].transform.localPosition = new Vector3(0.645f, 0.464f - i * _positionDistance, 0f);
+            }
+        }
     }
 
     /// <summary>

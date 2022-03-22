@@ -19022,6 +19022,7 @@ MonoBehaviour:
   _indicatorObject: {fileID: 938133412332914343, guid: 17abca00f3e3e8947927091755ab9b61, type: 3}
   _maxText: {fileID: 211049252}
   _minText: {fileID: 415430667}
+  PositionDistance: 0.2
 --- !u!23 &1169144089
 MeshRenderer:
   m_ObjectHideFlags: 0
