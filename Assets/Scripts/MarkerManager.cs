@@ -1,13 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 public class MarkerManager : MonoBehaviour
 {
-    public static MarkerManager Instance { get; private set; }
-
     private const double KmCon = 110.574;
 
     [SerializeField]
@@ -20,50 +18,81 @@ public class MarkerManager : MonoBehaviour
     //Temp variables for spawning markers
     public double TempLatitude;
     public double TempLongitude;
+    public string TempName;
 
-    private void Awake()
+    private PlayerPosition _playerPos;
+
+    public void SetPlayerPosition(PlayerPosition playerPos)
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(this);
-        }
+        _playerPos = playerPos;
     }
 
-    public void SpawnMarker(double latitude, double longitutde)
+    public void SpawnMarker(double latitude, double longitutde, string name, float[] values)
     {
         var obj = Instantiate(_marker, transform);
         var marker = obj.GetComponent<Marker>();
         marker.Latitude = latitude;
         marker.Longitude = longitutde;
+        marker.Name = name;
+        marker.Values = values;
+
+        var (dist, markerPos, origin) = GetDistanceFromPlayer(marker.Latitude, marker.Longitude);
+        marker.DistanceFromPlayer = (float)dist;
+        CheckMarkerDist(marker, markerPos, origin);
+
         _markers.Add(marker);
     }
 
-    public void ManageMarkers(double latitude, double longitude, Vector2 originPos)
+    public void ManageMarkers()
     {
         foreach (var marker in _markers)
         {
-            var markerpos = new Vector2((float)marker.Latitude, (float)marker.Longitude);
-            var origin = new Vector2((float)latitude, (float)longitude);
-            
-            var dist = Vector2.Distance(origin, markerpos) * KmCon;
-            if (dist < MarkerDistance)
-            {
-                marker.gameObject.SetActive(true);
-                markerpos -= origin;
-                markerpos.Normalize();
-                var pos = originPos + markerpos * SpawnDistance;
-                marker.transform.position = new Vector3(pos.x, 0, pos.y);
-            }
-            else
-                marker.gameObject.SetActive(false);
+            var (dist, markerPos, origin) = GetDistanceFromPlayer(marker.Latitude, marker.Longitude);
+            marker.DistanceFromPlayer = (float)dist;
+            CheckMarkerDist(marker, markerPos, origin);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CheckMarkerDist(Marker marker, Vector2 markerpos, Vector2 origin)
     {
-        
+        if (marker.DistanceFromPlayer < MarkerDistance)
+        {
+            marker.gameObject.SetActive(true);
+            markerpos -= origin;
+            markerpos.Normalize();
+            var pos = (Vector2)_playerPos.transform.position + markerpos * SpawnDistance;
+            marker.transform.position = new Vector3(pos.x, 0, pos.y);
+        }
+        else
+            marker.gameObject.SetActive(false);
+    }
+
+    public (double dist, Vector2 markerpos, Vector2 origin) GetDistanceFromPlayer(double Latitude, double Longitude)
+    {
+        var markerpos = new Vector2((float)Latitude, (float)Longitude);
+        var origin = new Vector2((float)_playerPos.Latitude, (float)_playerPos.Longitude);
+
+        return (Vector2.Distance(origin, markerpos) * KmCon, markerpos, origin);
+    }
+
+    public List<Marker> GetMarkerData()
+    {
+        var availableMarkers = _markers.Where(m => m.gameObject.activeSelf).ToList();
+        availableMarkers = availableMarkers.OrderBy(m => m.DistanceFromPlayer).ToList();
+        return availableMarkers;
+    }
+
+    /// <summary>
+    /// Creates x random points to simulate a graph
+    /// </summary>
+    public float[] RandomPoints(int amount, float min, float max)
+    {
+        float[] points = new float[amount];
+        for (int i = 0; i < amount; i++)
+        {
+            points[i] = Random.Range(min, max);
+        }
+        return points;
     }
 
     [CustomEditor(typeof(MarkerManager), true)]
@@ -74,11 +103,13 @@ public class MarkerManager : MonoBehaviour
             var manager = target as MarkerManager;
             var lat = manager.TempLatitude;
             var lon = manager.TempLongitude;
+            var name = manager.TempName;
 
             DrawDefaultInspector();
             if (GUILayout.Button("Spawn Marker"))
             {
-                manager.SpawnMarker(lat, lon);
+                var values = manager.RandomPoints(50, -50, 50);
+                manager.SpawnMarker(lat, lon, name, values);
             }
         }
     }

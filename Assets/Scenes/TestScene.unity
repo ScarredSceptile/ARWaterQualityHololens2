@@ -15674,6 +15674,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a8fb675e188e3348a30a87fecce678e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _markerManager: {fileID: 317845165}
 --- !u!1 &900445548
 GameObject:
   m_ObjectHideFlags: 0
@@ -19083,6 +19084,7 @@ MonoBehaviour:
   _indicatorObject: {fileID: 938133412332914343, guid: 17abca00f3e3e8947927091755ab9b61, type: 3}
   _maxText: {fileID: 211049252}
   _minText: {fileID: 415430667}
+  _markerManager: {fileID: 317845165}
   PositionDistance: 0.2
 --- !u!23 &1169144089
 MeshRenderer:
@@ -22570,7 +22572,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1414047294
 MonoBehaviour:
   m_ObjectHideFlags: 0
