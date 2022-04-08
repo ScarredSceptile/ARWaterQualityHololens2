@@ -22,6 +22,18 @@ public class MarkerManager : MonoBehaviour
 
     private PlayerPosition _playerPos;
 
+    private void Start()
+    {
+        var values1 = RandomPoints(50, -50, 50);
+        var values2 = RandomPoints(50, -50, 50);
+        var values3 = RandomPoints(50, -50, 50);
+        var values4 = RandomPoints(50, -50, 50);
+        SpawnMarker(60.76, -10.683, "Marker North", values1);
+        SpawnMarker(60.81, -10.683, "Marker South", values1);
+        SpawnMarker(60.789, -10.7, "Marker East", values1);
+        SpawnMarker(60.789, -10.66, "Marker West", values1);
+    }
+
     public void SetPlayerPosition(PlayerPosition playerPos)
     {
         _playerPos = playerPos;
@@ -95,6 +107,8 @@ public class MarkerManager : MonoBehaviour
         return points;
     }
 
+#if UNITY_EDITOR
+
     [CustomEditor(typeof(MarkerManager), true)]
     public class UiElementEditor : Editor
     {
@@ -113,4 +127,7 @@ public class MarkerManager : MonoBehaviour
             }
         }
     }
+
+#endif
+
 }
