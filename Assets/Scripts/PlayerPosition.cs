@@ -12,6 +12,11 @@ public class PlayerPosition : MonoBehaviour
     [SerializeField]
     private MarkerManager _markerManager;
 
+    private void Awake()
+    {
+        _markerManager.SetPlayerPosition(this);
+    }
+
     // Start is called before the first frame update
     void Start()
     {

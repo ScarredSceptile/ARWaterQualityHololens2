@@ -1,3 +1,4 @@
+using Microsoft.MixedReality.Toolkit.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,10 @@ public class MarkerManager : MonoBehaviour
 
     [SerializeField]
     private GameObject _marker;
+    [SerializeField]
+    private PinchSlider _graphSlider;
+    [SerializeField]
+    private PinchSlider _settingsSlider;
     private List<Marker> _markers = new List<Marker>();
 
     public float MarkerDistance;
@@ -29,9 +34,26 @@ public class MarkerManager : MonoBehaviour
         var values3 = RandomPoints(50, -50, 50);
         var values4 = RandomPoints(50, -50, 50);
         SpawnMarker(60.76, -10.683, "Marker North", values1);
-        SpawnMarker(60.81, -10.683, "Marker South", values1);
-        SpawnMarker(60.789, -10.7, "Marker East", values1);
-        SpawnMarker(60.789, -10.66, "Marker West", values1);
+        SpawnMarker(60.81, -10.683, "Marker South", values2);
+        SpawnMarker(60.789, -10.7, "Marker East", values3);
+        SpawnMarker(60.789, -10.66, "Marker West", values4);
+    }
+
+    public void UpdateDistance(string Slider)
+    {
+        if (Slider == "Graph")
+        {
+            MarkerDistance = _graphSlider.SliderValue * 29 + 1;
+            if (_settingsSlider.SliderValue != _graphSlider.SliderValue)
+                _settingsSlider.SliderValue = _graphSlider.SliderValue;
+        }
+        else if (Slider == "Settings")
+        {
+            MarkerDistance = _settingsSlider.SliderValue * 29 + 1;
+            if (_settingsSlider.SliderValue != _graphSlider.SliderValue)
+                _graphSlider.SliderValue = _settingsSlider.SliderValue;
+        }
+        ManageMarkers();
     }
 
     public void SetPlayerPosition(PlayerPosition playerPos)

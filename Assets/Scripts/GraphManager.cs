@@ -50,7 +50,7 @@ public class GraphManager : MonoBehaviour
         markers = markers.GetRange(0, Mathf.Min(colors.Length, markers.Count));
         foreach (var marker in markers)
         {
-            if (_dataIndicators.Where(d => d.GetName() == marker.Name).Count() == 0)
+            if (_dataIndicators.Where(d => d.GetName() == marker.Name).Count() == 0 || _dataIndicators.Count != markers.Count())
             {
                 Debug.Log("Change in markers Noticed!");
                 GenerateGraphs(markers);
@@ -104,13 +104,6 @@ public class GraphManager : MonoBehaviour
         var posNum = (int)Mathf.Abs(number);
         var scale = (int)Mathf.Pow(10, Mathf.Floor(Mathf.Log10(posNum)));
         return negativ * scale * (int)Mathf.Round(posNum / scale + 1);
-    }
-
-    private static string RandomString()
-    {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        return new string(Enumerable.Repeat(chars, 8)
-            .Select(s => s[Random.Range(0,s.Length)]).ToArray());
     }
 
     public void HideOtherLines(DataIndicator origin)
