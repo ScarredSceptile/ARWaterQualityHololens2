@@ -9,21 +9,24 @@ public class MarkerManager : MonoBehaviour
 {
     private const double KmCon = 110.574;
 
+    //Blue, Green, Red, Yellow
     [SerializeField]
-    private GameObject _marker;
+    private List<GameObject> _markers = new List<GameObject>();
     [SerializeField]
     private PinchSlider _graphSlider;
     [SerializeField]
     private PinchSlider _settingsSlider;
-    private List<Marker> _markers = new List<Marker>();
+    private List<Marker> _spawnedMarkers = new List<Marker>();
 
     public float MarkerDistance;
     public float SpawnDistance;
+
 
     //Temp variables for spawning markers
     public double TempLatitude;
     public double TempLongitude;
     public string TempName;
+    System.Random random = new System.Random();
 
     private PlayerPosition _playerPos;
 
@@ -63,7 +66,9 @@ public class MarkerManager : MonoBehaviour
 
     public void SpawnMarker(double latitude, double longitutde, string name, float[] values)
     {
-        var obj = Instantiate(_marker, transform);
+        var objec = _markers[random.Next(_markers.Count())];
+
+        var obj = Instantiate(objec, transform);
         var marker = obj.GetComponent<Marker>();
         marker.Latitude = latitude;
         marker.Longitude = longitutde;
@@ -74,12 +79,12 @@ public class MarkerManager : MonoBehaviour
         marker.DistanceFromPlayer = (float)dist;
         CheckMarkerDist(marker, markerPos, origin);
 
-        _markers.Add(marker);
+        _spawnedMarkers.Add(marker);
     }
 
     public void ManageMarkers()
     {
-        foreach (var marker in _markers)
+        foreach (var marker in _spawnedMarkers)
         {
             var (dist, markerPos, origin) = GetDistanceFromPlayer(marker.Latitude, marker.Longitude);
             marker.DistanceFromPlayer = (float)dist;
@@ -111,7 +116,7 @@ public class MarkerManager : MonoBehaviour
 
     public List<Marker> GetMarkerData()
     {
-        var availableMarkers = _markers.Where(m => m.gameObject.activeSelf).ToList();
+        var availableMarkers = _spawnedMarkers.Where(m => m.gameObject.activeSelf).ToList();
         availableMarkers = availableMarkers.OrderBy(m => m.DistanceFromPlayer).ToList();
         return availableMarkers;
     }
