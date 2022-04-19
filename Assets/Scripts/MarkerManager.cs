@@ -27,19 +27,22 @@ public class MarkerManager : MonoBehaviour
     public double TempLongitude;
     public string TempName;
     System.Random random = new System.Random();
+    public TextAsset jsonFile;
 
     private PlayerPosition _playerPos;
 
     private void Start()
     {
+        var qual = JsonUtility.FromJson<WaterQualities>(jsonFile.text);
+
         var values1 = RandomPoints(50, -50, 50);
         var values2 = RandomPoints(50, -50, 50);
         var values3 = RandomPoints(50, -50, 50);
         var values4 = RandomPoints(50, -50, 50);
-        SpawnMarker(60.76, -10.683, "Marker North", values1);
-        SpawnMarker(60.81, -10.683, "Marker South", values2);
-        SpawnMarker(60.789, -10.7, "Marker East", values3);
-        SpawnMarker(60.789, -10.66, "Marker West", values4);
+        SpawnMarker(60.76, -10.683, "Marker North", values1, qual);
+        SpawnMarker(60.81, -10.683, "Marker South", values2, null);
+        SpawnMarker(60.789, -10.7, "Marker East", values3, null);
+        SpawnMarker(60.789, -10.66, "Marker West", values4, null);
     }
 
     public void UpdateDistance(string Slider)
@@ -64,12 +67,15 @@ public class MarkerManager : MonoBehaviour
         _playerPos = playerPos;
     }
 
-    public void SpawnMarker(double latitude, double longitutde, string name, float[] values)
+    public void SpawnMarker(double latitude, double longitutde, string name, float[] values, WaterQualities qual)
     {
         var objec = _markers[random.Next(_markers.Count())];
 
         var obj = Instantiate(objec, transform);
         var marker = obj.GetComponent<Marker>();
+        if (qual != null)
+            marker.WaterQualityList = qual.WaterQuality;
+        marker.SetPlayer(_playerPos.gameObject);
         marker.Latitude = latitude;
         marker.Longitude = longitutde;
         marker.Name = name;
@@ -134,6 +140,11 @@ public class MarkerManager : MonoBehaviour
         return points;
     }
 
+    private List<WaterQuality> DataFromJson(string json)
+    {
+        return JsonUtility.FromJson<List<WaterQuality>>(json);
+    }
+
 #if UNITY_EDITOR
 
     [CustomEditor(typeof(MarkerManager), true)]
@@ -150,7 +161,7 @@ public class MarkerManager : MonoBehaviour
             if (GUILayout.Button("Spawn Marker"))
             {
                 var values = manager.RandomPoints(50, -50, 50);
-                manager.SpawnMarker(lat, lon, name, values);
+                manager.SpawnMarker(lat, lon, name, values, null);
             }
         }
     }

@@ -4838,6 +4838,7 @@ MonoBehaviour:
   TempLatitude: 60.789
   TempLongitude: -10.683
   TempName: 
+  jsonFile: {fileID: 4900000, guid: f4fffe23029c5a846896dc3afc70547c, type: 3}
 --- !u!1 &326812783
 GameObject:
   m_ObjectHideFlags: 0
