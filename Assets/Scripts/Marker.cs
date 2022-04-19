@@ -1,6 +1,7 @@
 using Microsoft.MixedReality.Toolkit.Input;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -32,6 +33,16 @@ public class Marker : MonoBehaviour, IMixedRealityFocusHandler, IMixedRealityPoi
         _spawnedInfo.transform.LookAt(2 * transform.position - _player.transform.position);
         _markerInfo = _spawnedInfo.GetComponent<MarkerInfo>();
         _markerInfo.UpdateNameAndStatus(Name, "Test string");
+        if (WaterQualityList != null)
+        {
+            var values = WaterQualityList.Skip(Mathf.Max(0, WaterQualityList.Count() - 12));
+            var ph = values.Select(n => double.Parse(n.pH)).Average();
+            var conduc = values.Select(n => double.Parse(n.Conductivity)).Average();
+            var turbidity = values.Select(n => double.Parse(n.Turbidity)).Average();
+            var watermm = values.Select(n => n.WaterLevelMm).Average();
+            var waterpoly = values.Select(n => double.Parse(n.WaterLevelPolynomial)).Average();
+            _markerInfo.UpdateValues(ph.ToString("N2"), conduc.ToString("N2"), turbidity.ToString("N2"), watermm.ToString("N2"), waterpoly.ToString("N2"));
+        }
     }
 
     public void EndLookAt()
@@ -48,7 +59,7 @@ public class Marker : MonoBehaviour, IMixedRealityFocusHandler, IMixedRealityPoi
 
     public void OnFocusExit(FocusEventData eventData)
     {
-        EndLookAt();
+        //EndLookAt();
     }
 
     public void OnPointerDown(MixedRealityPointerEventData eventData)

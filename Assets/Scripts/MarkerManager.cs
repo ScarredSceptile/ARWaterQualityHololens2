@@ -40,9 +40,9 @@ public class MarkerManager : MonoBehaviour
         var values3 = RandomPoints(50, -50, 50);
         var values4 = RandomPoints(50, -50, 50);
         SpawnMarker(60.76, -10.683, "Marker North", values1, qual);
-        SpawnMarker(60.81, -10.683, "Marker South", values2, null);
-        SpawnMarker(60.789, -10.7, "Marker East", values3, null);
-        SpawnMarker(60.789, -10.66, "Marker West", values4, null);
+        SpawnMarker(60.81, -10.683, "Marker South", values2, qual);
+        SpawnMarker(60.789, -10.7, "Marker East", values3, qual);
+        SpawnMarker(60.789, -10.66, "Marker West", values4, qual);
     }
 
     public void UpdateDistance(string Slider)
