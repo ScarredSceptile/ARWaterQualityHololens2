@@ -39,10 +39,10 @@ public class MarkerManager : MonoBehaviour
         var values2 = RandomPoints(50, -50, 50);
         var values3 = RandomPoints(50, -50, 50);
         var values4 = RandomPoints(50, -50, 50);
-        SpawnMarker(60.76, -10.683, "Marker North", values1, qual);
-        SpawnMarker(60.81, -10.683, "Marker South", values2, qual);
-        SpawnMarker(60.789, -10.7, "Marker East", values3, qual);
-        SpawnMarker(60.789, -10.66, "Marker West", values4, qual);
+        SpawnMarker(60.76, -10.683, "Marker North", values1, qual.WaterQuality.Take(1000).ToList());
+        SpawnMarker(60.81, -10.683, "Marker South", values2, qual.WaterQuality.Take(2000).ToList());
+        SpawnMarker(60.789, -10.7, "Marker East", values3, qual.WaterQuality.Take(3000).ToList());
+        SpawnMarker(60.789, -10.66, "Marker West", values4, qual.WaterQuality);
     }
 
     public void UpdateDistance(string Slider)
@@ -67,14 +67,14 @@ public class MarkerManager : MonoBehaviour
         _playerPos = playerPos;
     }
 
-    public void SpawnMarker(double latitude, double longitutde, string name, float[] values, WaterQualities qual)
+    public void SpawnMarker(double latitude, double longitutde, string name, float[] values, List<WaterQuality> qual)
     {
         var objec = _markers[random.Next(_markers.Count())];
 
         var obj = Instantiate(objec, transform);
         var marker = obj.GetComponent<Marker>();
         if (qual != null)
-            marker.WaterQualityList = qual.WaterQuality;
+            marker.WaterQualityList = qual;
         marker.SetPlayer(_playerPos.gameObject);
         marker.Latitude = latitude;
         marker.Longitude = longitutde;
