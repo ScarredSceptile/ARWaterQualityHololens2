@@ -39,9 +39,30 @@ public class DataGraph : MonoBehaviour
         return _points.Min();
     }
 
-    public void GenerateGraph(int range)
+    public void GenerateGraph(int range, bool pos, bool neg)
     {
         int amount = _points.Length;
+        Vector3[] points = new Vector3[amount];
+
+        for (int i = 0; i < amount; i++)
+        {
+            float clampedValue;
+            if (pos)
+                clampedValue = _points[i] / range * YModifier - 0.5f;
+            else if (neg)
+                clampedValue = _points[i] / -range * YModifier + 0.5f;
+            else
+             clampedValue = _points[i] / range * YModifier;
+
+            float xPoint = ((float)i / (float)amount * XModifier) - (XModifier / 2);
+            points[i] = new Vector3(xPoint, clampedValue, ZValue);
+        }
+        _lineRenderer.positionCount = amount;
+        _lineRenderer.SetPositions(points);
+    }
+
+    /*
+     int amount = _points.Length;
         Vector3[] points = new Vector3[amount];
 
         for (int i = 0; i < amount; i++)
@@ -52,5 +73,5 @@ public class DataGraph : MonoBehaviour
         }
         _lineRenderer.positionCount = amount;
         _lineRenderer.SetPositions(points);
-    }
+    */
 }
