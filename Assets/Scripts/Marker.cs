@@ -27,7 +27,10 @@ public class Marker : MonoBehaviour, IMixedRealityFocusHandler, IMixedRealityPoi
     public void StartLookAt()
     {
         if (_spawnedInfo != null)
+        {
+            _spawnedInfo.gameObject.SetActive(true);
             return;
+        }
         _spawnedInfo = Instantiate(_stationInfo);
         _spawnedInfo.transform.position = transform.position;
         _spawnedInfo.transform.LookAt(2 * transform.position - _player.transform.position);
@@ -50,6 +53,11 @@ public class Marker : MonoBehaviour, IMixedRealityFocusHandler, IMixedRealityPoi
         if (_spawnedInfo == null)
             return;
         Destroy(_spawnedInfo);
+    }
+
+    public void RemoveSpawned()
+    {
+        _spawnedInfo = null;
     }
 
     public void OnFocusEnter(FocusEventData eventData)

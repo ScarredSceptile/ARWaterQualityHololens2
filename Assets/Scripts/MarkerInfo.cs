@@ -19,4 +19,9 @@ public class MarkerInfo : MonoBehaviour
     {
         _values.text = $"{Ph}\n{conductivity}µS/cm\n{turbidity}NTU\n{watermm}mm\n{waterpoly}N2000";
     }
+
+    public void Deactivate()
+    {
+        gameObject.SetActive(false);
+    }
 }
