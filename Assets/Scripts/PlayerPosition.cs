@@ -1,3 +1,4 @@
+using Microsoft.MixedReality.Toolkit;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +25,7 @@ public class PlayerPosition : MonoBehaviour
         Latitude = 60.7897;
         Longitude = -10.6822;
         _markerManager.SetPlayerPosition(this);
+        CoreServices.SpatialAwarenessSystem.Disable();
     }
 
     // Update is called once per frame
