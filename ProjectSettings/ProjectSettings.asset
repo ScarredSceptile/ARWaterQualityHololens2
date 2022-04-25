@@ -135,7 +135,9 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -1103028569302976665, guid: ca15c53146a14de41932a253f881d9a0, type: 2}
+  - {fileID: 9215713847209271240, guid: 9cb07e1cb556161479ada21395d6dfdd, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -612,11 +614,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: ARWaterQuality
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 8096c7249677d901
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: Hololens
