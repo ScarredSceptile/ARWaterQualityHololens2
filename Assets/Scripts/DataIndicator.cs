@@ -23,6 +23,11 @@ public class DataIndicator : MonoBehaviour
         _name.text = name;
     }
 
+    public string GetName()
+    {
+        return _name.text;
+    }
+
     public void SetColor(Color color)
     {
         _spriteRenderer.color = color;
@@ -93,5 +98,8 @@ public class DataIndicator : MonoBehaviour
         }
     }
 
-
+    private void OnDestroy()
+    {
+        Destroy(graph.gameObject);
+    }
 }
